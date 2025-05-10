@@ -14,7 +14,7 @@ erDiagram
   }
 
   PensionProvider {
-    string id PK
+    string value PK
     string name
   }
 
