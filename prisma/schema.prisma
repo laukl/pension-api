@@ -11,8 +11,8 @@ datasource db {
 model PensionPot {
   id                        String   @id @unique @default(cuid())
   potName                   String
-  employer                  String
-  annualInterestRate        Float
+  employer                  String?
+  annualInterestRate        Float?
   defaultAnnualInterestRate Float
   amount                    Float
   monthlyPayment            Float

@@ -4,7 +4,7 @@ FROM node:22-alpine3.20 AS deps
 
 WORKDIR /usr/src/app
 
-COPY . .
+COPY package*.json .
 
 RUN npm ci
 
