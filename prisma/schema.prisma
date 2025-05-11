@@ -1,0 +1,30 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model PensionPot {
+  id                        String   @id @unique @default(cuid())
+  potName                   String
+  employer                  String
+  annualInterestRate        Float
+  defaultAnnualInterestRate Float
+  amount                    Float
+  monthlyPayment            Float
+  isWorkplacePension        Boolean
+  lastUpdatedAt             DateTime @updatedAt
+
+  providerId String?
+  provider   PensionProvider? @relation(fields: [providerId], references: [id])
+}
+
+model PensionProvider {
+  id          String       @id @unique
+  name        String
+  pensionPots PensionPot[]
+}

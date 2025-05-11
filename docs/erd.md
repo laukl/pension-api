@@ -18,5 +18,5 @@ erDiagram
     string name
   }
 
-  PensionPot ||--o| PensionProvider : ""
+  PensionPot }|--o| PensionProvider : ""
 ```
