@@ -9,22 +9,42 @@ datasource db {
 }
 
 model PensionPot {
-  id                        String   @id @unique @default(cuid())
+  id                        String   @id @unique @default(uuid())
   potName                   String
   employer                  String?
+  previousName              String?
+  previousAddress           String?
+  policyNumber              Int?
+  annualFee                 Float?
   annualInterestRate        Float?
   defaultAnnualInterestRate Float
   amount                    Float
   monthlyPayment            Float
-  isWorkplacePension        Boolean
+  isWorkplacePension        Boolean  @default(false)
+  isDraft                   Boolean  @default(true)
   lastUpdatedAt             DateTime @updatedAt
 
   providerId String?
   provider   PensionProvider? @relation(fields: [providerId], references: [id])
+  searches   PotSearch[]
 }
 
 model PensionProvider {
   id          String       @id @unique
   name        String
   pensionPots PensionPot[]
+}
+
+model PotSearch {
+  id      String       @id @unique @default(uuid())
+  status  SearchStatus
+  foundOn DateTime
+
+  potId String
+  pot   PensionPot @relation(fields: [potId], references: [id])
+}
+
+enum SearchStatus {
+  FOUND
+  TO_HUNT
 }
