@@ -36,20 +36,15 @@ await prisma.$transaction(
   ),
 );
 
-await prisma.$transaction(
-  data.searchedPensions.map((pot) =>
-    prisma.potSearch.upsert({
-      where: { id: pot.id },
-      create: {
-        foundOn: z.date().parse(pot.foundOn),
-        status: z.nativeEnum(SearchStatus).parse(pot.status),
-        potId: pot.id,
-      },
-      update: {
-        foundOn: z.date().parse(pot.foundOn),
-        status: z.nativeEnum(SearchStatus).parse(pot.status),
-        potId: pot.id,
-      },
-    }),
-  ),
-);
+const searches = await prisma.potSearch.count();
+
+if (searches === 0) {
+  await prisma.potSearch.createMany({
+    data: data.searchedPensions.map((pot) => ({
+      foundOn: z.date().parse(pot.foundOn),
+      status: z.nativeEnum(SearchStatus).parse(pot.status),
+      potId: pot.id,
+    })),
+    skipDuplicates: true,
+  });
+}
