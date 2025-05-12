@@ -1,5 +1,6 @@
 import Fastify from "fastify";
 import potsRoutes from "./routes/pots.js";
+import providersRoutes from "./routes/providers.js";
 import searchesRoutes from "./routes/searches.js";
 
 const HOST = process.env.HOST || "0.0.0.0";
@@ -13,6 +14,7 @@ fastify.setErrorHandler((error, _request, reply) => {
 
 fastify.register(potsRoutes);
 fastify.register(searchesRoutes);
+fastify.register(providersRoutes);
 
 try {
   await fastify.listen({ host: HOST, port: PORT });
