@@ -1,18 +1,27 @@
 import { FastifyInstance } from "fastify";
 import { z } from "zod";
+import { ValidationError } from "../lib/error.js";
 import prisma from "../lib/prisma.js";
 
 const getPotsQueryParamsSchema = z.object({
   name: z.string().optional(),
+  amount: z.number({ coerce: true }).positive().optional(),
+  amountComparator: z.enum(["gt", "lt", "gte", "lte"]).optional(),
 });
 
 const getPotByIdSchema = z.object({ id: z.string() });
 
 export default function (fastify: FastifyInstance) {
   fastify.get("/pots", (req) => {
-    const params = getPotsQueryParamsSchema.parse(req.query);
+    const result = getPotsQueryParamsSchema.safeParse(req.query);
+    if (!result.success) {
+      throw new ValidationError(result.error.issues);
+    }
     return prisma.pensionPot.findMany({
-      where: { potName: { contains: params.name } },
+      where: {
+        potName: { contains: result.data.name },
+        amount: { [result.data.amountComparator ?? "gte"]: result.data.amount },
+      },
       include: { provider: true },
     });
   });

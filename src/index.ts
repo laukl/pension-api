@@ -7,6 +7,10 @@ const PORT = Number(process.env.PORT) || 3000;
 
 const fastify = Fastify({ logger: true });
 
+fastify.setErrorHandler((error, _request, reply) => {
+  reply.status(500).send({ error: error.message });
+});
+
 fastify.register(potsRoutes);
 fastify.register(searchesRoutes);
 
