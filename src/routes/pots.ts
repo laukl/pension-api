@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { z } from "zod";
 import { ValidationError } from "../lib/error.js";
+import filterPotsWithForecast from "../lib/filter-pots-with-forecast.js";
 import prisma from "../lib/prisma.js";
 
 const getPotsQueryParamsSchema = z.object({
@@ -9,17 +10,20 @@ const getPotsQueryParamsSchema = z.object({
   provider: z.string().optional(),
   amount: z.number({ coerce: true }).positive().optional(),
   amountComparator: z.enum(["gt", "lt", "gte", "lte"]).optional(),
+  forecastYears: z.number({ coerce: true }).positive().optional(),
+  forecastAmount: z.number({ coerce: true }).positive().optional(),
 });
 
 const getPotByIdSchema = z.object({ id: z.string() });
 
 export default function (fastify: FastifyInstance) {
-  fastify.get("/pots", (req) => {
+  fastify.get("/pots", async (req) => {
     const result = getPotsQueryParamsSchema.safeParse(req.query);
     if (!result.success) {
       throw new ValidationError(result.error.issues);
     }
-    return prisma.pensionPot.findMany({
+
+    const pots = await prisma.pensionPot.findMany({
       where: {
         potName: { contains: result.data.name },
         employer: { equals: result.data.employer },
@@ -28,12 +32,26 @@ export default function (fastify: FastifyInstance) {
       },
       include: { provider: true },
     });
+
+    if (result.data.forecastYears && result.data.forecastAmount) {
+      return filterPotsWithForecast(
+        pots,
+        result.data.forecastYears,
+        result.data.forecastAmount,
+      );
+    }
+
+    return pots;
   });
 
   fastify.get("/pots/:id", (req) => {
-    const params = getPotByIdSchema.parse(req.params);
+    const result = getPotByIdSchema.safeParse(req.params);
+    if (!result.success) {
+      throw new ValidationError(result.error.issues);
+    }
+
     return prisma.pensionPot.findUnique({
-      where: { id: params.id },
+      where: { id: result.data.id },
       include: { provider: true },
     });
   });
@@ -43,6 +61,7 @@ export default function (fastify: FastifyInstance) {
     if (!result.success) {
       throw new ValidationError(result.error.issues);
     }
+
     return prisma.pensionPot.findMany({
       where: {
         potName: { contains: result.data.name },
