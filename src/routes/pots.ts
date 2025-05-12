@@ -25,9 +25,10 @@ export default function (fastify: FastifyInstance) {
     });
   });
 
-  fastify.get("/pots/pensions", () => {
+  fastify.get("/pots/pensions", (req) => {
+    const params = getPotsQueryParamsSchema.parse(req.query);
     return prisma.pensionPot.findMany({
-      where: { searches: { none: {} } },
+      where: { searches: { none: {} }, potName: { contains: params.name } },
       include: { provider: true },
     });
   });
