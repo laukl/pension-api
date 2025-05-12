@@ -5,6 +5,8 @@ import prisma from "../lib/prisma.js";
 
 const getPotsQueryParamsSchema = z.object({
   name: z.string().optional(),
+  employer: z.string().optional(),
+  provider: z.string().optional(),
   amount: z.number({ coerce: true }).positive().optional(),
   amountComparator: z.enum(["gt", "lt", "gte", "lte"]).optional(),
 });
@@ -20,6 +22,8 @@ export default function (fastify: FastifyInstance) {
     return prisma.pensionPot.findMany({
       where: {
         potName: { contains: result.data.name },
+        employer: { equals: result.data.employer },
+        providerId: { equals: result.data.provider },
         amount: { [result.data.amountComparator ?? "gte"]: result.data.amount },
       },
       include: { provider: true },
@@ -35,9 +39,18 @@ export default function (fastify: FastifyInstance) {
   });
 
   fastify.get("/pots/pensions", (req) => {
-    const params = getPotsQueryParamsSchema.parse(req.query);
+    const result = getPotsQueryParamsSchema.safeParse(req.query);
+    if (!result.success) {
+      throw new ValidationError(result.error.issues);
+    }
     return prisma.pensionPot.findMany({
-      where: { searches: { none: {} }, potName: { contains: params.name } },
+      where: {
+        potName: { contains: result.data.name },
+        employer: { equals: result.data.employer },
+        providerId: { equals: result.data.provider },
+        amount: { [result.data.amountComparator ?? "gte"]: result.data.amount },
+        searches: { none: {} },
+      },
       include: { provider: true },
     });
   });
