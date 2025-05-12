@@ -6,7 +6,9 @@ WORKDIR /usr/src/app
 
 COPY package*.json .
 
-RUN npm ci
+COPY prisma prisma
+
+RUN npm ci && npm run prisma generate
 
 # ----- Build
 
