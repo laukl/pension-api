@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/laukl/pensions-api/compare/v1.0.0...v1.0.1) (2025-05-13)
+
+
+### Bug Fixes
+
+* remove zod native enum ([36ce3d3](https://github.com/laukl/pensions-api/commit/36ce3d34aacc9408e22807e68b144eac125c7183))
+
 ## 1.0.0 (2025-05-13)
 
 
