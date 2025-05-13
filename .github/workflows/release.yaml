@@ -35,6 +35,17 @@ jobs:
         with:
           node-version: 22
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build image
+        uses: docker/build-push-action@v6
+        with:
+          tags: backend:latest
+
+      - name: Run backend
+        run: docker run -d --name backend -p 3000:3000 backend:latest
+
       - name: Install dependencies
         run: npm ci
 
