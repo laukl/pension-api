@@ -17,8 +17,8 @@ jobs:
         image: postgres:17-alpine
         ports:
           - 5432:5432
-        # env:
-        #   POSTGRES_PASSWORD: postgres
+        env:
+          POSTGRES_PASSWORD: postgres
     env:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
     steps:
