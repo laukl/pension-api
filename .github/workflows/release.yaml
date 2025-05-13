@@ -35,8 +35,8 @@ jobs:
         with:
           node-version: 22
 
-      # - name: Seed postgres database
-      #   run: npm run seed
+      - name: Seed postgres database
+        run: npm run seed
 
   release-please:
     name: Releaser
