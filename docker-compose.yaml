@@ -9,7 +9,7 @@ services:
       - pgdata:/var/lib/postgresql/data
 
   backend:
-    build: .
+    image: ghcr.io/laukl/pensions-api:latest
     ports:
       - 3000:3000
     environment:

@@ -1,4 +1,3 @@
-import { SearchStatus } from "@prisma/client";
 import fs from "fs";
 import { z } from "zod";
 
@@ -13,7 +12,7 @@ const pensionProviderSchema = z.object({
 const pensionPotSchema = z.object({
   id: z.string(),
   potName: z.string(),
-  status: z.nativeEnum(SearchStatus).nullish(),
+  status: z.enum(["FOUND", "TO_HUNT"]).nullish(),
   previousAddress: z.string().nullish(),
   previousName: z.string().nullish(),
   policyNumber: z.number().nullish(),

@@ -1,11 +1,10 @@
-import { SearchStatus } from "@prisma/client";
 import { FastifyInstance } from "fastify";
 import { z } from "zod";
 import { ValidationError } from "../lib/error.js";
 import prisma from "../lib/prisma.js";
 
 const getSearchesQueryParamsSchema = z.object({
-  status: z.nativeEnum(SearchStatus).optional(),
+  status: z.enum(["FOUND", "TO_HUNT"]).optional(),
 });
 
 export default function (fastify: FastifyInstance) {
