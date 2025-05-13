@@ -14,8 +14,7 @@
     "prisma": "prisma",
     "seed": "npm run build && PENSIONS_DATA_PATH=data/pensions.json node ./dist/scripts/seed.js",
     "migrate:run": "prisma migrate deploy",
-    "migrate:create": "prisma migrate dev",
-    "prepare": "husky"
+    "migrate:create": "prisma migrate dev"
   },
   "author": "",
   "license": "ISC",
@@ -29,7 +28,6 @@
   "devDependencies": {
     "@jest/globals": "^29.7.0",
     "@types/node": "^22.15.17",
-    "husky": "^9.1.7",
     "nodemon": "^3.1.10",
     "prettier": "^3.5.3",
     "prettier-plugin-organize-imports": "^4.1.0",
