@@ -32,9 +32,11 @@ ENV NODE_ENV=production
 
 COPY --from=build /usr/src/app/dist dist
 
+COPY prisma prisma
+
 COPY package*.json .
 
-RUN npm ci
+RUN npm ci && npm run prisma generate
 
 USER node
 
