@@ -24,6 +24,16 @@ docker compose up -f docker-compose.dev.yaml up
 docker compose up
 ```
 
+**4. Prepare database**
+
+```bash
+# Run migrations
+npm run migrate:run
+
+# Seed database
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres npm run seed
+```
+
 ## Scope
 
 1. Get all pension pots
