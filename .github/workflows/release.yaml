@@ -13,6 +13,10 @@ jobs:
     name: Run unit and e2e tests
     runs-on: ubuntu-latest
     services:
+      registry:
+        image: registry:3
+        ports:
+          - 5000:5000
       postgres:
         image: postgres:17-alpine
         ports:
@@ -41,10 +45,11 @@ jobs:
       - name: Build image
         uses: docker/build-push-action@v6
         with:
-          tags: backend:latest
+          push: true
+          tags: localhost:5000/pensions-api/app:latest
 
       - name: Run backend
-        run: docker run -d --name backend -p 3000:3000 backend:latest
+        run: docker run -d --name app -p 3000:3000 localhost:5000/pensions-api/app:latest
 
       - name: Install dependencies
         run: npm ci
