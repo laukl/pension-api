@@ -64,6 +64,8 @@ jobs:
       - name: Run unit tests
         run: npm run test
 
+      - run: curl http://localhost:3000
+
       - name: Run end-to-end tests
         run: npm run test:e2e
 
