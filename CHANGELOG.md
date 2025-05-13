@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/laukl/pensions-api/compare/v1.0.2...v1.0.3) (2025-05-13)
+
+
+### Bug Fixes
+
+* add missing pension pot forecast filter ([ded92fa](https://github.com/laukl/pensions-api/commit/ded92fae5012780d2112f1d8d800b07343e3ad46))
+
 ## [1.0.2](https://github.com/laukl/pensions-api/compare/v1.0.1...v1.0.2) (2025-05-13)
 
 
