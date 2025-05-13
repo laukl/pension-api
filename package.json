@@ -12,6 +12,7 @@
     "start": "node ./dist/index.js",
     "prisma": "prisma",
     "seed": "npm run build && PENSIONS_DATA_PATH=data/pensions.json node ./dist/scripts/seed.js",
+    "migrate:run": "prisma migrate deploy",
     "migrate:create": "prisma migrate dev",
     "prepare": "husky"
   },

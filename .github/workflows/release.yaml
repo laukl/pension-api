@@ -38,8 +38,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Seed postgres database
-        run: npm run seed
+      - name: Migrate and seed postgres database
+        run: |
+          npm run migrate:run
+          npm run seed
 
   release-please:
     name: Releaser
