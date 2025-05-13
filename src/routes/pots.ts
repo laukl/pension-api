@@ -56,13 +56,13 @@ export default function (fastify: FastifyInstance) {
     });
   });
 
-  fastify.get("/pots/pensions", (req) => {
+  fastify.get("/pots/pensions", async (req) => {
     const result = getPotsQueryParamsSchema.safeParse(req.query);
     if (!result.success) {
       throw new ValidationError(result.error.issues);
     }
 
-    return prisma.pensionPot.findMany({
+    const pots = await prisma.pensionPot.findMany({
       where: {
         potName: { contains: result.data.name },
         employer: { equals: result.data.employer },
@@ -72,5 +72,15 @@ export default function (fastify: FastifyInstance) {
       },
       include: { provider: true },
     });
+
+    if (result.data.forecastYears && result.data.forecastAmount) {
+      return filterPotsWithForecast(
+        pots,
+        result.data.forecastYears,
+        result.data.forecastAmount,
+      );
+    }
+
+    return pots;
   });
 }
