@@ -1,28 +1,47 @@
 import { describe, expect, test } from "@jest/globals";
-import { PotSearch } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 describe("end-to-end searches routes", () => {
   test("get all searches", async () => {
-    const data = await fetch("http://localhost:3000/searches").then(
-      (res) => res.json() as Promise<PotSearch[]>,
+    const searches = await fetch("http://localhost:3000/searches").then(
+      (res) =>
+        res.json() as Promise<
+          Prisma.PotSearchGetPayload<{ include: { pot: true } }>[]
+        >,
     );
-    expect(data).not.toBeNull();
-    expect(data.length).toEqual(2);
+    expect(searches).not.toBeNull();
+    expect(searches.length).toEqual(2);
+    expect(searches.at(0)?.pot).not.toBeNull();
+    expect(searches.at(1)?.pot).not.toBeNull();
   });
 
   test("get all FOUND searches", async () => {
-    const data = await fetch(
+    const searches = await fetch(
       "http://localhost:3000/searches?status=FOUND",
-    ).then((res) => res.json() as Promise<PotSearch[]>);
-    expect(data).not.toBeNull();
-    expect(data.length).toEqual(1);
+    ).then(
+      (res) =>
+        res.json() as Promise<
+          Prisma.PotSearchGetPayload<{ include: { pot: true } }>[]
+        >,
+    );
+    expect(searches).not.toBeNull();
+    expect(searches.length).toEqual(1);
+    expect(searches.at(0)?.status).toEqual("FOUND");
+    expect(searches.at(0)?.pot).not.toBeNull();
   });
 
   test("get all TO_HUNT searches", async () => {
-    const data = await fetch(
+    const searches = await fetch(
       "http://localhost:3000/searches?status=TO_HUNT",
-    ).then((res) => res.json() as Promise<PotSearch[]>);
-    expect(data).not.toBeNull();
-    expect(data.length).toEqual(1);
+    ).then(
+      (res) =>
+        res.json() as Promise<
+          Prisma.PotSearchGetPayload<{ include: { pot: true } }>[]
+        >,
+    );
+    expect(searches).not.toBeNull();
+    expect(searches.length).toEqual(1);
+    expect(searches.at(0)?.status).toEqual("TO_HUNT");
+    expect(searches.at(0)?.pot).not.toBeNull();
   });
 });
