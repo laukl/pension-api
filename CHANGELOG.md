@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/laukl/pensions-api/compare/v1.0.1...v1.0.2) (2025-05-13)
+
+
+### Bug Fixes
+
+* use native enums ([b08003a](https://github.com/laukl/pensions-api/commit/b08003ad75d36dc5b7f866fff42dd37f4930f4e2))
+
 ## [1.0.1](https://github.com/laukl/pensions-api/compare/v1.0.0...v1.0.1) (2025-05-13)
 
 
