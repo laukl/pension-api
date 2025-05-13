@@ -43,6 +43,12 @@ jobs:
           npm run migrate:run
           npm run seed
 
+      - name: Run unit tests
+        run: npm run test
+
+      - name: Run end-to-end tests
+        run: npm run test:e2e
+
   release-please:
     name: Releaser
     runs-on: ubuntu-latest
